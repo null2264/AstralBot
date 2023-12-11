@@ -2,11 +2,15 @@ package dev.erdragh.astralbot.commands
 
 import com.mojang.authlib.GameProfile
 import dev.erdragh.astralbot.LOGGER
+import dev.erdragh.astralbot.config.AstralBotConfig
+import dev.erdragh.astralbot.guild
 import dev.erdragh.astralbot.handlers.WhitelistHandler
 import dev.erdragh.astralbot.minecraftHandler
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.Commands
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
@@ -55,6 +59,13 @@ object LinkCommand : HandledSlashCommand {
                 event.hook.setEphemeral(true).sendMessageFormat("%s already linked", event.member).queue()
             } else {
                 WhitelistHandler.whitelist(event.user, minecraftID)
+                guild?.getRoleById(AstralBotConfig.DISCORD_ROLE.get())?.let {
+                    try {
+                        guild?.addRoleToMember(event.user, it)?.queue()
+                    } catch (e: Exception) {
+                        LOGGER.error("Failed to add role ${it.name} to member ${event.user.effectiveName}", e)
+                    }
+                }
                 event.hook.setEphemeral(true)
                     .sendMessageFormat("Linked %s to Minecraft username %s", event.member, minecraftUser?.name).queue()
             }
@@ -103,6 +114,7 @@ object LinkCheckCommand : HandledSlashCommand, AutocompleteCommand {
     override val command = Commands.slash("linkcheck", "Checks link status of a specified Minecraft or Discord account")
         .addOption(OptionType.STRING, OPTION_MC, "Minecraft Username", false, true)
         .addOption(OptionType.MENTIONABLE, OPTION_DC, "Discord User", false)
+        .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MODERATE_MEMBERS))
 
     /**
      * Handles the case the command issuer gave a Minecraft name
@@ -121,26 +133,22 @@ object LinkCheckCommand : HandledSlashCommand, AutocompleteCommand {
         if (discordID != null) {
             val guild = event.guild
             if (guild != null) {
-                // TODO: Replace with more performant solution
-                var found = false
-                guild.loadMembers {
-                    if (it.idLong == discordID) {
+                guild.retrieveMemberById(discordID).submit().whenComplete { member, error ->
+                    if (error != null) {
+                        event.hook.setEphemeral(true)
+                            .sendMessageFormat(
+                                "Something went wrong while trying to get link for %s: %s",
+                                minecraftProfile?.name,
+                                error.localizedMessage
+                            )
+                            .queue()
+                    } else {
                         event.hook.setEphemeral(true)
                             .sendMessageFormat(
                                 "Minecraft username %s is linked to %s",
                                 minecraftProfile?.name ?: minecraftName,
-                                it
+                                member
                             ).queue()
-                        found = true
-                    }
-                }.onError {
-                    event.hook.setEphemeral(true).sendMessageFormat("Something went wrong: %s", it.localizedMessage)
-                        .queue()
-                }.onSuccess {
-                    if (!found) {
-                        event.hook.setEphemeral(true).sendMessageFormat(
-                            notFound, minecraftProfile?.name ?: minecraftName
-                        ).queue()
                     }
                 }
             } else {
@@ -185,12 +193,15 @@ object LinkCheckCommand : HandledSlashCommand, AutocompleteCommand {
                 event.hook.setEphemeral(true)
                     .sendMessage("You need to specify either a Discord user or a Minecraft Username, not both").queue()
             }
+
             minecraftName != null -> {
                 handleMinecraftToDiscord(event, minecraftName)
             }
+
             discordUser is Member -> {
                 handleDiscordToMinecraft(event, discordUser)
             }
+
             else -> {
                 event.hook.setEphemeral(true)
                     .sendMessage("You need to specify either a Discord user or a Minecraft Username").queue()
@@ -200,9 +211,8 @@ object LinkCheckCommand : HandledSlashCommand, AutocompleteCommand {
 
     override fun autocomplete(event: CommandAutoCompleteInteractionEvent) {
         if (event.focusedOption.name == OPTION_MC) {
-            // TODO: Maybe cache this for servers with a lot of members?
-            val minecraftUsers = minecraftHandler?.getOnlinePlayers()?.map(GameProfile::getName)
-            event.replyChoiceStrings(minecraftUsers?.filter { it.startsWith(event.focusedOption.value) } ?: listOf())
+            event.replyChoiceStrings(
+                minecraftHandler?.getOnlinePlayers()?.filter { it.startsWith(event.focusedOption.value) } ?: listOf())
                 .queue()
         }
     }
