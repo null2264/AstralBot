@@ -15,7 +15,7 @@ description = "Discord Bot and Minecraft Mod in one bundle."
 [[dependencies.astralbot]]
 modId = "forge"
 mandatory = true
-versionRange = "[47,)"
+versionRange = "[40,)"
 ordering = "NONE"
 side = "BOTH"
 
