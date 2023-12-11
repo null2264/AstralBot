@@ -37,8 +37,7 @@ object LinkCommand : HandledSlashCommand {
 
         // Get the Minecraft user ID from the link code
         val linkCode = event.getOption(OPTION_CODE)?.asString
-        val linkCodeInt = linkCode?.toDoubleOrNull()?.toInt()
-        val minecraftID = if (linkCodeInt != null) WhitelistHandler.getPlayerFromCode(linkCodeInt) else null
+        val minecraftID = if (linkCode != null) WhitelistHandler.getPlayerFromCode(linkCode.uppercase()) else null
 
         // Notify the user that the given link code couldn't be associated with a Minecraft account
         if (minecraftID == null) {
