@@ -8,10 +8,16 @@ import java.net.URL
  * Config for the AstralBot mod. This uses Forge's config system
  * to reduce dependencies. This can be used on Fabric by using
  * the Forge Config API port.
- * @author Erdragh
+ * @author Erdragh, null2264
  */
 object AstralBotConfig {
     val SPEC: ForgeConfigSpec
+
+    /**
+     * The token used to authenticate to Discord Bot.
+     * The bot will try to use DISCORD_TOKEN environment variable if leave empty.
+     */
+    val DISCORD_TOKEN: ForgeConfigSpec.ConfigValue<String>
 
     /**
      * Whether the default whitelisting process is respected or ignored.
@@ -68,6 +74,8 @@ object AstralBotConfig {
 
         builder.comment("AstralBot Config")
 
+        DISCORD_TOKEN = builder.comment("Discord Bot Token, leave empty to use environment variable instead")
+            .define("discordToken", "")
         REQUIRE_LINK_FOR_WHITELIST = builder.comment("Whether to require being linked to be whitelisted")
             .define("requireLinkForWhitelist", false)
         DISCORD_LINK = builder.comment("Link to the discord where your users can run the /link command")
