@@ -24,10 +24,10 @@ object BotMod : ModInitializer {
             stopAstralbot()
         }
 
-        ServerMessageEvents.CHAT_MESSAGE.register { message, player ->
+        ServerMessageEvents.CHAT_MESSAGE.register { message, player, _ ->
             minecraftHandler?.sendChatToDiscord(player, message.contents)
         }
-        ServerMessageEvents.GAME_MESSAGE.register { message ->
+        ServerMessageEvents.GAME_MESSAGE.register { _, message, _ ->
             if (message !is DiscordMessageComponent) {
                 minecraftHandler?.sendChatToDiscord(null as ServerPlayer?, message.string)
             }
