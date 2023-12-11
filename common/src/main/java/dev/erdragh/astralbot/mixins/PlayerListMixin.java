@@ -18,7 +18,7 @@ public class PlayerListMixin {
         cir.setReturnValue(WhitelistHandler.INSTANCE.handleLoginAttempt(profile.getId(), Boolean.TRUE.equals(cir.getReturnValue())));
     }
 
-    @Inject(method = "canPlayerLogin", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;translatable(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"), cancellable = true)
+    @Inject(method = "canPlayerLogin", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/TranslatableComponent;<init>(Ljava/lang/String;)V", ordinal = 0), cancellable = true)
     private void astralbot$returnWhiteListMessage(SocketAddress socketAddress, GameProfile gameProfile, CallbackInfoReturnable<Component> cir) {
         cir.setReturnValue(WhitelistHandler.INSTANCE.writeWhitelistMessage(gameProfile));
     }

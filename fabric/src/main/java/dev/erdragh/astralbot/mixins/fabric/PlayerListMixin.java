@@ -30,9 +30,9 @@ public abstract class PlayerListMixin {
 
     private void onBroadcast(Component message, ChatType chatType, UUID uuid) {
         if (chatType == ChatType.CHAT) {
-            ServerMessageEvents.getCHAT_MESSAGE().invoker().onChatMessage(message, getPlayer(uuid));
+            ServerMessageEvents.getCHAT_MESSAGE().invoker().onChatMessage(message, getPlayer(uuid), null);
         } else if (chatType == ChatType.SYSTEM) {
-            ServerMessageEvents.getGAME_MESSAGE().invoker().onGameMessage(message);
+            ServerMessageEvents.getGAME_MESSAGE().invoker().onGameMessage(null, message, null);
         }
     }
 }
