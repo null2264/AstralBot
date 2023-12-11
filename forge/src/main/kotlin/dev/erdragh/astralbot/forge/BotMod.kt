@@ -52,6 +52,12 @@ object BotMod {
         }
     }
 
+    private fun onSystemMessage(event: SystemMessageEvent) {
+        if (event.message !is DiscordMessageComponent) {
+            minecraftHandler?.sendChatToDiscord(null as ServerPlayer?, event.message.string)
+        }
+    }
+
     private fun onPlayerJoin(event: PlayerEvent.PlayerLoggedInEvent) {
         minecraftHandler?.onPlayerJoin(event.entity.name.string)
     }
