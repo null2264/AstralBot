@@ -1,8 +1,11 @@
 package dev.erdragh.astralbot.commands
 
+import dev.erdragh.astralbot.textChannel
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.events.message.GenericMessageEvent
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 /**
@@ -11,6 +14,24 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
  * @author Erdragh
  */
 object CommandHandlingListener : ListenerAdapter() {
+    /**
+     * A way to register the commands without kicking the bot
+     * @param event the event that was fired when the bot
+     * received a message
+     */
+    override fun onMessageReceived(event: MessageReceivedEvent) {
+        if (event.author.isBot) return
+
+        val content = event.message.contentRaw
+        if (content == "!sync") {
+            event.guild.updateCommands().addCommands(
+                commands.map { it.command }
+            ).queue {
+                event.channel.sendMessage("Commands synced").queue()
+            }
+        }
+    }
+
     /**
      * Registers commands on the Guild (Discord Server)
      * @param event the event that was fired when the bot
