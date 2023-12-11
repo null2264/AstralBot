@@ -29,7 +29,7 @@ object LinkCommand : HandledSlashCommand {
 
     override val command: SlashCommandData =
         Commands.slash("link", "Links your Minecraft account with your Discord account")
-            .addOption(OptionType.NUMBER, OPTION_CODE, "your personal link code", true)
+            .addOption(OptionType.STRING, OPTION_CODE, "your personal link code", true)
 
     override fun handle(event: SlashCommandInteractionEvent) {
         // DB Interactions could take a while, so the reply needs to get deferred
