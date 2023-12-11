@@ -1,12 +1,9 @@
 package dev.erdragh.astralbot.forge
 
-import dev.erdragh.astralbot.LOGGER
+import dev.erdragh.astralbot.*
 import dev.erdragh.astralbot.config.AstralBotConfig
 import dev.erdragh.astralbot.forge.event.SystemMessageEvent
 import dev.erdragh.astralbot.handlers.DiscordMessageComponent
-import dev.erdragh.astralbot.minecraftHandler
-import dev.erdragh.astralbot.startAstralbot
-import dev.erdragh.astralbot.stopAstralbot
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.ServerChatEvent
 import net.minecraftforge.event.entity.player.PlayerEvent
@@ -17,7 +14,7 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 
-@Mod("astralbot")
+@Mod(MODID)
 object BotMod {
     init {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, AstralBotConfig.SPEC)

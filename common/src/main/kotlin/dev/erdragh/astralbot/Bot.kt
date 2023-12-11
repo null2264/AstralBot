@@ -60,10 +60,15 @@ private fun setupFromJDA(api: JDA) {
 }
 
 fun startAstralbot(server: MinecraftServer) {
-    val env = System.getenv()
-    if (!env.containsKey("DISCORD_TOKEN")) {
-        LOGGER.warn("Not starting AstralBot because of missing DISCORD_TOKEN environment variable.")
-        return
+    var token = AstralBotConfig.DISCORD_TOKEN.get()
+
+    if (token.isNullOrEmpty()) {
+        val env = System.getenv()
+        if (!env.containsKey("DISCORD_TOKEN")) {
+            LOGGER.warn("Not starting AstralBot because of missing token.")
+            return
+        }
+        token = env["DISCORD_TOKEN"]
     }
 
     baseDirectory = File(server.serverDirectory, MODID)
@@ -76,7 +81,7 @@ fun startAstralbot(server: MinecraftServer) {
     FAQHandler.start()
 
     jda = JDABuilder.createLight(
-            env["DISCORD_TOKEN"],
+            token,
             GatewayIntent.MESSAGE_CONTENT,
             GatewayIntent.GUILD_MESSAGES,
             GatewayIntent.GUILD_MEMBERS
