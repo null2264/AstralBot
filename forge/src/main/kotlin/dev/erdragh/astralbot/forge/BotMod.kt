@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 
-@Mod("astralbot")
+@Mod(MODID)
 object BotMod {
     init {
         NeoForgeConfigRegistry.INSTANCE.register(MODID, ModConfig.Type.SERVER, AstralBotConfig.SPEC)

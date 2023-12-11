@@ -9,7 +9,7 @@ import java.net.URL
  * Config for the AstralBot mod. This uses Forge's config system
  * to reduce dependencies. This can be used on Fabric by using
  * the Forge Config API port.
- * @author Erdragh
+ * @author Erdragh, null2264
  */
 object AstralBotConfig {
     val SPEC: ModConfigSpec
@@ -19,6 +19,12 @@ object AstralBotConfig {
      * look for a token in this config option.
      */
     val DISCORD_TOKEN: ModConfigSpec.ConfigValue<String>
+
+    /**
+     * The token used to authenticate to Discord Bot.
+     * The bot will try to use DISCORD_TOKEN environment variable if leave empty.
+     */
+    val DISCORD_TOKEN: ForgeConfigSpec.ConfigValue<String>
 
     /**
      * Whether the default whitelisting process is respected or ignored.
