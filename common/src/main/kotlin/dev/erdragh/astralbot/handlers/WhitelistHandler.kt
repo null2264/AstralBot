@@ -15,7 +15,6 @@ import java.sql.Connection
 import java.util.*
 import java.util.Random
 import kotlin.random.asKotlinRandom
-import kotlin.random.nextInt
 
 /**
  * This is a Handler for the whitelisting process for AstralBot.
@@ -41,7 +40,7 @@ object WhitelistHandler {
     // Users whose code it is. Storing these in memory only
     // Results in users getting a new code when the server
     // restarts, which is acceptable in my opinion.
-    private val loginCodes = Collections.synchronizedMap(HashMap<Int, UUID>())
+    private val loginCodes = Collections.synchronizedMap(HashMap<String, UUID>())
     // The random used to generate the login codes.
     // I'm using .asKotlinRandom() here because the
     // default Kotlin Random constructor wants a seed.
@@ -174,19 +173,21 @@ object WhitelistHandler {
         return result
     }
 
-    fun getOrGenerateWhitelistCode(minecraftID: UUID): Int {
+    fun getOrGenerateWhitelistCode(minecraftID: UUID): String {
         val foundCode = loginCodes.entries.find { it.value == minecraftID }?.key
         if (foundCode != null) return foundCode
 
-        val loginCodeRange = 10000..99999
-        val whitelistCode = loginRandom.nextInt(loginCodeRange)
+        val allowedChars = ('A'..'Z') + ('0'..'9')
+        val whitelistCode = (1..5)
+            .map { allowedChars.random() }
+            .joinToString("")
         // The following line could be vulnerable to a DOS attack
         // I accept the possibility of a login code possibly getting overwritten
         // so this DOS won't cause an infinite loop. Such a DOS may still cause
         // Players to not be able to whitelist.
         // while (loginCodes.containsKey(whitelistCode)) whitelistCode = loginRandom.nextInt(loginCodeRange)
         loginCodes[whitelistCode] = minecraftID
-        return whitelistCode
+	return whitelistCode
     }
 
     /**
@@ -226,7 +227,7 @@ object WhitelistHandler {
      * @return the login code of the given user or `null` if there isn't
      * one for them yet.
      */
-    private fun getWhitelistCode(minecraftID: UUID): Int?  {
+    private fun getWhitelistCode(minecraftID: UUID): String?  {
         return loginCodes.entries.find { it.value == minecraftID }?.key
     }
 
@@ -238,8 +239,8 @@ object WhitelistHandler {
      * link code or `null` if nobody is associated with
      * the given code.
      */
-    fun getPlayerFromCode(code: Int): UUID? {
-        return loginCodes[code]
+    fun getPlayerFromCode(code: String): UUID? {
+        return loginCodes[code.uppercase()]
     }
 
     /**
