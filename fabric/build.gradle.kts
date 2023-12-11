@@ -29,5 +29,6 @@ dependencies {
 
     modApi(group = "com.terraformersmc", name = "modmenu", version = modMenuVersion)
 
-    modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:$forgeConfigAPIVersion")
+    //modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:$forgeConfigAPIVersion")
+    modApi("net.minecraftforge:forgeconfigapiport-fabric:$forgeConfigAPIVersion")
 }
