@@ -35,3 +35,14 @@ dependencies {
     modApi("com.electronwill.night-config:toml:$nightConfig")
     modApi("net.minecraftforge:forgeconfigapiport-fabric:$forgeConfigAPIVersion")
 }
+
+// Fixes "duplicate fabric loader classes found on classpath" error
+configurations.configureEach {
+    resolutionStrategy.eachDependency {
+        val fabricLoaderVersion: String by project
+
+        if (requested.module.name == "fabric-loader") {
+            useVersion(fabricLoaderVersion)
+        }
+    }
+}
