@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,9 +27,10 @@ public abstract class PlayerListMixin {
         onBroadcast(message, chatType);
     }
 
+    @Unique
     private void onBroadcast(Component message, ChatType chatType) {
         if (chatType == ChatType.SYSTEM) {
-            MinecraftForge.EVENT_BUS.post(new SystemMessageEvent(message));
+            MinecraftForge.EVENT_BUS.post(new SystemMessageEvent(message.getString(), message));
         }
     }
 }
