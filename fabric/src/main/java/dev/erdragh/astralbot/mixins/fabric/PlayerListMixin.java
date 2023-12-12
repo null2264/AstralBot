@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,6 +29,7 @@ public abstract class PlayerListMixin {
         onBroadcast(message, chatType, uuid);
     }
 
+    @Unique
     private void onBroadcast(Component message, ChatType chatType, UUID uuid) {
         if (chatType == ChatType.CHAT) {
             ServerMessageEvents.getCHAT_MESSAGE().invoker().onChatMessage(message, getPlayer(uuid), null);
