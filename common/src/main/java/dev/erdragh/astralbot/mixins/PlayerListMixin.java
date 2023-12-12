@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.net.SocketAddress;
 
 @Mixin(PlayerList.class)
-public class PlayerListMixin {
+public abstract class PlayerListMixin {
     @Inject(method = "isWhiteListed", at = @At("RETURN"), cancellable = true)
     void astralbot$isWhiteListed(GameProfile profile, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(WhitelistHandler.INSTANCE.handleLoginAttempt(profile.getId(), Boolean.TRUE.equals(cir.getReturnValue())));

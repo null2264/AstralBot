@@ -37,7 +37,6 @@ class ServerMessageEvents {
             }
     }
 
-
     fun interface ChatMessage {
         fun onChatMessage(message: Component, player: ServerPlayer?, unused: Void?)
     }
