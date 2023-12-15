@@ -184,6 +184,7 @@ subprojects {
                 // Forge restricts loading certain classes for security reasons.
                 // Luckily, shadow can relocate them to a different package.
                 relocate("org.apache.commons.collections4", "dev.erdragh.shadowed.org.apache.commons.collections4")
+                relocate("com.fasterxml.jackson", "dev.erdragh.shadowed.com.fasterxml.jackson")
 
                 exclude(".cache/**") //Remove datagen cache from jar.
                 exclude("**/astralbot/datagen/**") //Remove data gen code from jar.
