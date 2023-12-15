@@ -169,8 +169,12 @@ subprojects {
                     exclude(group = "org.jetbrains.kotlinx")
                     // Minecraft already ships with a logging system
                     exclude(group = "org.slf4j")
+		    // Conflict with GroovyModLoader JiJ
+		    exclude(group = "com.fasterxml.jackson.core")
                 }
             }
+	    shadowCommon("com.fasterxml.jackson.core:jackson-core:2.14.1")
+	    shadowCommon("com.fasterxml.jackson.core:jackson-databind:2.14.1")
         }
 
         tasks {
