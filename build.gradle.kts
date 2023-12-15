@@ -173,8 +173,6 @@ subprojects {
 		    exclude(group = "com.fasterxml.jackson.core")
                 }
             }
-	    shadowCommon("com.fasterxml.jackson.core:jackson-core:2.14.1")
-	    shadowCommon("com.fasterxml.jackson.core:jackson-databind:2.14.1")
         }
 
         tasks {
@@ -188,9 +186,6 @@ subprojects {
                 // Forge restricts loading certain classes for security reasons.
                 // Luckily, shadow can relocate them to a different package.
                 relocate("org.apache.commons.collections4", "dev.erdragh.shadowed.org.apache.commons.collections4")
-                relocate("com.fasterxml.jackson.core", "dev.erdragh.shadowed.com.fasterxml.jackson.core")
-                relocate("com.fasterxml.jackson.annotation", "dev.erdragh.shadowed.com.fasterxml.jackson.annotation")
-                relocate("com.fasterxml.jackson.databind", "dev.erdragh.shadowed.com.fasterxml.jackson.databind")
 
                 exclude(".cache/**") //Remove datagen cache from jar.
                 exclude("**/astralbot/datagen/**") //Remove data gen code from jar.
