@@ -1,9 +1,9 @@
 name: build
 on:
   push:
-    branches: [ "dev/**" ]
+    branches: [ "dev/**", "fix/**" ]
   pull_request:
-    branches: [ "dev/**" ]
+    branches: [ "dev/**", "fix/**" ]
   workflow_dispatch:
     inputs:
       publish:
