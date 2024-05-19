@@ -15,6 +15,9 @@ to see how much is already implemented.
 - Discord and Minecraft chat synchronization
 - FAQ commands using Markdown files without needing to restart the server
 
+### This fork
+- Alphanumeric whitelist code
+
 ## Dependencies
 
 This mod has a few dependencies, some of which are not specified directly as they're technically optional:
