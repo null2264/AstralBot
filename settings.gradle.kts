@@ -10,6 +10,8 @@ pluginManagement {
         maven(url = "https://maven.resourcefulbees.com/repository/maven-public/")
         gradlePluginPortal()
     }
+
+    includeBuild("plugins")
 }
 
 plugins {

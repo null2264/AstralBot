@@ -1,3 +1,9 @@
+import io.github.null2264.utils.kotlinForgeRuntimeLibrary
+
+plugins {
+    id("io.github.null2264.utils.kotlin-forge-runtime-library")
+}
+
 architectury {
     forge()
 }
@@ -47,11 +53,7 @@ dependencies {
 
     // This *should* theoretically fix the Forge development environment not having
     // access to certain classes, but I haven't gotten it to work just yet.
-    forgeRuntimeLibrary("net.dv8tion:JDA:$jdaVersion") {
-        exclude(module = "opus-java")
-        exclude(group = "org.jetbrains.kotlin")
-        exclude(group = "org.slf4j")
-    }
+    kotlinForgeRuntimeLibrary("net.dv8tion:JDA:$jdaVersion")
 
     // On 1.20.2 upwards, the forge config api port either reimplements neo's
     // or lexforge's config API. I chose to use Neo's by default, resulting in
