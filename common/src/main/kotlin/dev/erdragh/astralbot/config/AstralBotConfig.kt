@@ -21,12 +21,6 @@ object AstralBotConfig {
     val DISCORD_TOKEN: ModConfigSpec.ConfigValue<String>
 
     /**
-     * The token used to authenticate to Discord Bot.
-     * The bot will try to use DISCORD_TOKEN environment variable if leave empty.
-     */
-    val DISCORD_TOKEN: ForgeConfigSpec.ConfigValue<String>
-
-    /**
      * Whether the default whitelisting process is respected or ignored.
      * Setting this to `true` will *force* every user who wants to join
      * the server to link their account, even Operators.
