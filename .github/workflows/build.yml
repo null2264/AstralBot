@@ -27,14 +27,13 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - name: checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: setup jdk ${{ matrix.java }}
-        uses: actions/setup-java@v4
+      - name: Setup Gradle
+        uses: null2264/actions/gradle-setup@6712f98d592b126629afd27dc4870c93b53426b4
         with:
-          java-version: ${{ matrix.java }}
-          distribution: 'temurin'
+          java: ${{ matrix.java }}
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
@@ -50,12 +49,14 @@ jobs:
         with:
           name: build-fabric
           path: fabric/build/libs
+
       - name: Capture Forge Artifacts
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v4
         with:
           name: build-forge
           path: forge/build/libs
+
       - name: Capture Changelog
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v4
@@ -78,12 +79,14 @@ jobs:
           path: build/fabric
           pattern: build-fabric
           merge-multiple: true
+
       - name: Download Forge artifacts
         uses: actions/download-artifact@v4
         with:
           path: build/forge
           pattern: build-forge
           merge-multiple: true
+
       - name: Download Changelog
         uses: actions/download-artifact@v4
         with:
@@ -92,6 +95,7 @@ jobs:
 
       - name: List build artifacts
         run: ls -R build
+
       - name: Show Changelog
         run: cat build-changelog/prepared_changelog.md
 
@@ -102,7 +106,7 @@ jobs:
           path: "./gradle.properties"
           properties: "version enabledPlatforms minecraftVersion"
 
-      - name: Upload Forge Releases (Curse/Modrinth)
+      - name: Upload Forge Releases (GitHub)
         id: forge_release
         if: contains(steps.properties.outputs.enabledPlatforms, 'forge')
         uses: Kir-Antipov/mc-publish@v3.3.0
@@ -117,16 +121,7 @@ jobs:
           loaders: forge
           game-versions: ${{ steps.properties.outputs.minecraftVersion }}
 
-          curseforge-dependencies: |
-            sqlite-jdbc(optional)
-            kotlin-for-forge(required)
-            forge-config-api-port-fabric(required)
-          modrinth-dependencies: |
-            sqlite-jdbc(optional)
-            kotlin-for-forge(required)
-            forge-config-api-port(required)
-
-      - name: Upload Fabric Releases (Curse/Modrinth)
+      - name: Upload Fabric Releases (GitHub)
         id: fabric_release
         if: contains(steps.properties.outputs.enabledPlatforms, 'fabric')
         uses: Kir-Antipov/mc-publish@v3.3.0
