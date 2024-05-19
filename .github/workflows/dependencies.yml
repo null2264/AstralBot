@@ -1,7 +1,7 @@
-name: build
+name: Build
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "dev/**" ]
 
 permissions:
   contents: write
@@ -10,14 +10,13 @@ jobs:
   dependencies:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: setup jdk 17
-        uses: actions/setup-java@v4
+      - name: Setup Gradle
+        uses: null2264/actions/gradle-setup@6712f98d592b126629afd27dc4870c93b53426b4
         with:
-          java-version: 17
-          distribution: 'temurin'
+          java: 17
 
       - name: Build with Gradle and generate dependency Graph
         uses: gradle/gradle-build-action@v2
