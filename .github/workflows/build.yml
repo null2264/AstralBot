@@ -16,16 +16,7 @@ permissions:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        # Use these Java versions
-        java: [
-          17,    # Current Java LTS & minimum supported by Minecraft
-        ]
-        # and run on Linux
-        os: [ ubuntu-latest ]
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,7 +24,7 @@ jobs:
       - name: Setup Gradle
         uses: null2264/actions/gradle-setup@6712f98d592b126629afd27dc4870c93b53426b4
         with:
-          java: ${{ matrix.java }}
+          java: 21
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
@@ -44,21 +35,18 @@ jobs:
         run: ./gradlew -q prepareChangelog > prepared_changelog.md
 
       - name: Capture Fabric Artifacts
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v4
         with:
           name: build-fabric
           path: fabric/build/libs
 
       - name: Capture Forge Artifacts
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v4
         with:
           name: build-forge
           path: forge/build/libs
 
       - name: Capture Changelog
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v4
         with:
           name: build-changelog
