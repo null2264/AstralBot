@@ -1,7 +1,11 @@
 # AstralBot
-[![build workflow](https://img.shields.io/github/actions/workflow/status/Erdragh/AstralBot/build.yml?style=for-the-badge)](https://github.com/Erdragh/AstralBot/actions/workflows/build.yml)
+[![build workflow](https://img.shields.io/github/actions/workflow/status/Erdragh/AstralBot/build.yml?style=for-the-badge)](https://github.com/null2264/AstralBot/actions/workflows/build.yml)
 [![License](https://img.shields.io/github/license/Juuxel/Adorn.svg?style=for-the-badge)](LICENSE)
 ![Environment](https://img.shields.io/badge/environment-server-4caf50?style=for-the-badge)
+
+> [!WARNING]
+> This is my personal build AstralBot, if you want to use this mod,
+> please consider using the [upstream version](https://github.com/Erdragh/AstralBot/) instead.
 
 This is a Minecraft mod and Discord Bot in one package. It's intended for the [Create: Astral](https://www.curseforge.com/minecraft/modpacks/create-astral)
 Modpack's official server, but it's implemented cross-platform to be usable by others too.
