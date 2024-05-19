@@ -17,6 +17,7 @@ jobs:
         uses: null2264/actions/gradle-setup@6712f98d592b126629afd27dc4870c93b53426b4
         with:
           java: 17
+          gradle-no-cache-if: 'true'
 
       - name: Build with Gradle and generate dependency Graph
         uses: gradle/gradle-build-action@v2
