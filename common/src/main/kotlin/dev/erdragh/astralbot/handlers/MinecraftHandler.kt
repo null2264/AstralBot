@@ -151,12 +151,12 @@ class MinecraftHandler(private val server: MinecraftServer) : ListenerAdapter() 
 
         val escape = { it: String -> it.replace("_", "\\_") }
         textChannel?.sendMessage(
-            if (player != null)
+            player?.let {
                 AstralBotTextConfig.PLAYER_MESSAGE.get()
                     .replace("{{message}}", formatComponentToMarkdown(message))
-                    .replace("{{fullName}}", escape(player.displayName?.string ?: player.name.string))
-                    .replace("{{name}}", escape(player.name.string))
-            else escape(message.string)
+                    .replace("{{fullName}}", escape(it.displayName?.string ?: it.name.string))
+                    .replace("{{name}}", escape(it.name.string))
+            } ?: escape(message.string)
         )
             ?.addEmbeds(formattedEmbeds)
             ?.setSuppressedNotifications(true)
