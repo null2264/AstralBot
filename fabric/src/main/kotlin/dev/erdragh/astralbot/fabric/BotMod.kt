@@ -16,6 +16,8 @@ import net.neoforged.fml.config.ModConfig
 
 object BotMod : ModInitializer {
     override fun onInitialize() {
+        loaderApi = FabricLoaderAPI()
+
         NeoForgeConfigRegistry.INSTANCE.register(MODID, ModConfig.Type.SERVER, AstralBotConfig.SPEC)
         NeoForgeConfigRegistry.INSTANCE.register(MODID, ModConfig.Type.SERVER, AstralBotTextConfig.SPEC, "astralbot-text.toml")
 

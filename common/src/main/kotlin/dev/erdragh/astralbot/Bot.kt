@@ -1,5 +1,6 @@
 package dev.erdragh.astralbot
 
+import dev.erdragh.astralbot.abc.LoaderAPI
 import dev.erdragh.astralbot.commands.discord.CommandHandlingListener
 import dev.erdragh.astralbot.config.AstralBotConfig
 import dev.erdragh.astralbot.handlers.FAQHandler
@@ -35,6 +36,8 @@ var baseDirectory: File? = null
 
 private lateinit var setupJob: Job
 var shuttingDown = AtomicBoolean(false)
+
+lateinit var loaderApi: LoaderAPI
 
 /**
  * @return the time at which the AstralBot was started
