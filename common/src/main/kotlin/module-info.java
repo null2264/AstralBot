@@ -27,4 +27,5 @@ module Minecraft.astralbot.common.main {
   requires forgeconfigapiport.common.neoforgeapi;
 
   requires java.desktop;
+  requires api;
 }

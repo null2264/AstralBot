@@ -19,6 +19,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ClientInformation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
+import org.geysermc.floodgate.api.FloodgateApi
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
@@ -32,8 +33,9 @@ import kotlin.math.min
  */
 class MinecraftHandler(private val server: MinecraftServer) : ListenerAdapter() {
     private val playerNames = HashSet<String>(server.maxPlayers);
-    private val notchPlayer = byName("Notch")?.let { ServerPlayer(this.server, this.server.allLevels.elementAt(0), it, ClientInformation.createDefault()) }
-
+    private val notchPlayer = byName("Notch").javaProfile?.let {
+        ServerPlayer(this.server, this.server.allLevels.elementAt(0), it, ClientInformation.createDefault())
+    }
 
     companion object {
         private val numberFormat = DecimalFormat("###.##")
@@ -96,29 +98,42 @@ class MinecraftHandler(private val server: MinecraftServer) : ListenerAdapter() 
     }
 
     /**
-     * Fetches the [GameProfile] of a given Minecraft user ID
+     * Fetches the [MinecraftProfile] of a given Minecraft user ID
      * @param id a User ID possibly associated with a Minecraft Account
-     * @return the [GameProfile] of the given [id] or `null`
+     * @return the [MinecraftProfile] of the given [id]
      * if:
      * - The given [id] doesn't have an actual Minecraft account
      *   associated with it
      * - The [server]'s profile cache hasn't been initialized yet
      */
-    fun byUUID(id: UUID): GameProfile? {
-        return server.profileCache?.get(id)?.getOrNull()
+    fun byUUID(id: UUID): MinecraftProfile {
+        // FIXME
+        if (loaderApi.isModLoaded(FLOODGATE)) {
+            val floodgate = FloodgateApi.getInstance()
+            val floodgatePlayer = floodgate.getPlayer(id)
+            val linkedPlayer = if (floodgatePlayer.isLinked) floodgatePlayer.linkedPlayer else null
+
+            return MinecraftProfile(
+                floodgatePlayer.javaUniqueId,
+                linkedPlayer?.javaUniqueId,
+                server.profileCache?.get(id)?.getOrNull()
+            )
+        }
+        return MinecraftProfile(id, null, server.profileCache?.get(id)?.getOrNull())
     }
 
     /**
-     * Fetches the [GameProfile] of a given Minecraft username
+     * Fetches the [MinecraftProfile] of a given Minecraft username
      * @param name a username possibly associated with a Minecraft Account
-     * @return the [GameProfile] of the given [name] or `null`
+     * @return the [MinecraftProfile] of the given [name]
      * if:
      * - The given [name] doesn't have an actual Minecraft account
      *   associated with it
      * - The [server]'s profile cache hasn't been initialized yet
      */
-    fun byName(name: String): GameProfile? {
-        return server.profileCache?.get(name)?.getOrNull()
+    fun byName(name: String): MinecraftProfile {
+        val gameProfile = server.profileCache?.get(name)?.getOrNull()
+        return MinecraftProfile(gameProfile)
     }
 
     /**

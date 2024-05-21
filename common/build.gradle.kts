@@ -11,4 +11,6 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${fabricLoaderVersion}")
 
     api("fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:$forgeConfigAPIVersion")
+    api("org.geysermc.geyser:api:2.2.0-SNAPSHOT")
+    api("org.geysermc.floodgate:api:2.2.2-SNAPSHOT")
 }

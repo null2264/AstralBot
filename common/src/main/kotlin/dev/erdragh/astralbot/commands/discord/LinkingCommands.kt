@@ -6,6 +6,7 @@ import dev.erdragh.astralbot.config.AstralBotTextConfig
 import dev.erdragh.astralbot.guild
 import dev.erdragh.astralbot.handlers.WhitelistHandler
 import dev.erdragh.astralbot.minecraftHandler
+import dev.erdragh.astralbot.util.UNNAMED_ACCOUNT
 import dev.erdragh.astralbot.waitForSetup
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Member
@@ -26,8 +27,6 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
 object LinkCommand : HandledSlashCommand {
     // Specifying option names as constants to prevent typos
     private const val OPTION_CODE = "code"
-
-    private const val UNNAMED_ACCOUNT = "Unnamed Account";
 
     override val command: SlashCommandData =
         Commands.slash("link", "Links your Minecraft account with your Discord account")

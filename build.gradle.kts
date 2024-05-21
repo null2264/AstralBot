@@ -61,6 +61,7 @@ subprojects {
             name = "Fuzs Mod Resources"
             setUrl("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
         }
+        maven(url = "https://repo.opencollab.dev/main/")
     }
 
     // Bot dependencies
